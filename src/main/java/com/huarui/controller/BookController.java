@@ -34,6 +34,9 @@ public class BookController {
      @ApiParamImplicitL：一个请求参数
      @ApiParamsImplicit 多个请求参数
 
+
+     produces = "application/json" 添加即可在swagger2 指定json格式提交
+
      */
 
 
@@ -66,7 +69,7 @@ public class BookController {
             @ApiImplicitParam(name = "id", value = "图书ID", required = true, dataType = "Long",paramType = "path"),
             @ApiImplicitParam(name = "book", value = "图书实体book", required = true, dataType = "Book")
     })
-    @RequestMapping(value="/{id}", method= RequestMethod.PUT)
+    @RequestMapping(value="/{id}", method= RequestMethod.PUT,produces = "application/json")
     public String putUser(@PathVariable Long id, @RequestBody Book book) {
         Book book1 = books.get(id);
         book1.setName(book.getName());
