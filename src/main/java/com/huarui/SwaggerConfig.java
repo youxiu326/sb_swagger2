@@ -24,11 +24,45 @@ public class SwaggerConfig {
      */
     @Bean
     public Docket docket() {
-        return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select()
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .select()
                 .apis(RequestHandlerSelectors.basePackage("com.huarui.controller"))
                 .paths(PathSelectors.any()).build();
 
     }
+
+
+/*  以注解方式查询
+
+    @Documented
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target({ElementType.METHOD,ElementType.TYPE})
+    public @interface EnableApi {
+
+    }
+
+
+    @Bean
+    public Docket createRestApi() {
+        Predicate<RequestHandler> predicate = new Predicate<RequestHandler>() {
+            @Override
+            public boolean apply(RequestHandler input) {
+                Class<?> declaringClass = input.declaringClass();
+                if(declaringClass.isAnnotationPresent(EnableApi.class)) // 被注解的类
+                    return true;
+                if(input.isAnnotatedWith(EnableApi.class)) // 被注解的方法
+                    return true;
+                return false;
+            }
+        };
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(apiInfo())
+                .useDefaultResponseMessages(false)
+                .select()
+                .apis(predicate)
+                .build();
+    }*/
 
     //构建api文档的详细信息函数
     private ApiInfo apiInfo() {
