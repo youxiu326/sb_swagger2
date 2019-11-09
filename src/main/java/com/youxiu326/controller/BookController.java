@@ -1,23 +1,18 @@
-package com.huarui.controller;
+package com.youxiu326.controller;
 
-import com.huarui.entity.Book;
+import com.youxiu326.entity.Book;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
-
 import java.util.*;
 
-/**
- * @author lance(ZYH)
- * @function
- * @date 2018-07-09 21:39
- */
 @RestController
 @RequestMapping(value = "/bookcurd")
-@Api("图书列表相关api")
+@Api(value="书籍controller",tags={"书籍操作接口"})
 public class BookController {
 
     /**
@@ -33,12 +28,16 @@ public class BookController {
      @ApiError ：发生错误返回的信息
      @ApiParamImplicitL：一个请求参数
      @ApiParamsImplicit 多个请求参数
-
-
-     produces = "application/json" 添加即可在swagger2 指定json格式提交
-
      */
 
+    /**Content-type常见类型：
+     * 1.application/x-www-form-urlencoded
+     * 2.application/json
+     * 3.multipart/form-data
+     * 4.text/xml
+     * consumes = "application/x-www-form-urlencoded;charset=utf-8"     指定处理请求的提交内容类型（Content-Type），例如application/json, text/html
+     * produces = "application/json;charset=utf-8"     返回json格式数据
+     */
 
 
     Map<Long, Book> books = Collections.synchronizedMap(new HashMap<Long, Book>());
@@ -50,12 +49,32 @@ public class BookController {
         return book;
     }
 
-    @ApiOperation(value="创建图书", notes="创建图书")
+    @ApiOperation(value="form格式提交创建图书", notes="form格式提交创建图书(哈哈哈)")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "name", value = "名称", required = true, dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "price", value = "价格", required = true, dataType = "float",paramType = "query")
+    })
+    @RequestMapping(value = "/saveBook",method = RequestMethod.POST,consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public String saveBook(Book book){
+        Book book1 = books.get(book.getId());
+        if(book1 == null){
+            book1 = new Book();
+            book1.setId(new Random().nextLong());
+        }
+        book1.setName(book.getName());
+        book1.setPrice(book.getPrice());
+        books.put(book1.getId(), book1);
+        // 这里返回json字符串
+        return "{\"msg\":\"SUCCESS！\",\"state\":1}";
+    }
+
+
+    @ApiOperation(value="json格式提交创建图书", notes="json格式提交创建图书")
     @ApiImplicitParam(name = "book", value = "图书详细实体", required = true, dataType = "Book")
     @RequestMapping(value="", method=RequestMethod.POST)
     public String postBook(@RequestBody Book book) {
         books.put(book.getId(), book);
-        return "success";
+        return "SUCCESS";
     }
     @ApiOperation(value="获图书细信息", notes="根据url的id来获取详细信息")
     @ApiImplicitParam(name = "id", value = "ID", required = true, dataType = "Long",paramType = "path")
@@ -75,14 +94,15 @@ public class BookController {
         book1.setName(book.getName());
         book1.setPrice(book.getPrice());
         books.put(id, book1);
-        return "success";
+        return "SUCCESS";
     }
+
     @ApiOperation(value="删除图书", notes="根据url的id来指定删除图书")
     @ApiImplicitParam(name = "id", value = "图书ID", required = true, dataType = "Long",paramType = "path")
     @RequestMapping(value="/{id}", method=RequestMethod.DELETE)
     public String deleteUser(@PathVariable Long id) {
         books.remove(id);
-        return "success";
+        return "SUCCESS";
     }
 
     @ApiIgnore//使用该注解忽略这个API

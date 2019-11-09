@@ -1,4 +1,4 @@
-package com.huarui.entity;
+package com.youxiu326.entity;
 
 import java.io.Serializable;
 

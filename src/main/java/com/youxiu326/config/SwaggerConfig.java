@@ -1,4 +1,4 @@
-package com.huarui;
+package com.youxiu326.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +27,7 @@ public class SwaggerConfig {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.huarui.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.youxiu326.controller"))
                 .paths(PathSelectors.any()).build();
 
     }
@@ -70,7 +70,7 @@ public class SwaggerConfig {
                 //页面标题
                 .title("springBoot测试使用Swagger2构建RESTful API")
                 //创建人
-                .contact(new Contact("lihui", "http://blog.youxiu326.com", ""))
+                .contact(new Contact("youxiu326", "http://youxiu326.com", ""))
                 //版本号
                 .version("1.0")
                 //描述
